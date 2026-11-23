@@ -118,11 +118,42 @@ Compares keyword search (Postgres full text), vector search, and vector + LLM re
 precision@5, recall@5 and latency.
 
 The labels live in `eval/labels.csv`: one row per (resume, job) pair that is a good match. Resumes
-are text files in `eval/resumes/`. The included ones are small examples for the sample jobs; to get
-meaningful numbers, load real jobs and label more pairs.
+are text files in `eval/resumes/`. `eval/labels_sample.csv` holds the labels for the 30 made-up jobs
+in `data/sample_jobs.csv`.
 
 Note: precision@5 can't reach 1.0 for a resume that only has 2 good jobs in the data, which is why
 recall is printed too.
+
+### Results on real jobs
+
+Data: 760 live postings from the Greenhouse boards of airbnb, figma, robinhood and coinbase
+(loaded 2026-11-23). 4 student resumes, 20 labeled (resume, job) pairs: 7 backend, 6 frontend,
+5 data analyst, 2 ML. Re-rank used `llama3.2:3b` (8k context) through Ollama on CPU, top 20
+candidates in, top 5 out. Full output: `eval/results.txt`.
+
+| mode    | precision@5 | recall@5 | median latency |
+|---------|-------------|----------|----------------|
+| keyword | 0.05        | 0.04     | 0.02 s         |
+| vector  | 0.10        | 0.10     | 0.03 s         |
+| rerank  | 0.10        | 0.10     | 511 s (CPU)    |
+
+The LLM answered for all 4 resumes (no fallbacks to vector search).
+
+What this shows:
+
+- Vector search beats the keyword baseline, but both are low in absolute terms.
+- **Re-ranking did not help here, because retrieval is the bottleneck.** For 3 of the 4 resumes none
+  of the labeled jobs are in the vector top 20 at all (recall@20 was 0 for backend, frontend and ML;
+  3 of 5 for data analyst), so the re-ranker never sees them. The pool is mostly senior and
+  non-engineering roles, and embeddings rank "Senior Software Engineer" above "Software Engineer
+  Intern" for a student resume. The re-ranker can only reorder what retrieval hands it.
+- Latency for rerank is dominated by running a 3B model on CPU (about 3.5 tokens/s). A hosted
+  model would be far faster, but would be a different number.
+
+Caveats: only 20 labels from a single labeler (labeled by reading the postings, before looking at
+what the system ranked), 4 resumes, and one run at temperature 0. Treat these as a baseline, not
+as a precise measurement. A seniority-aware retrieval step (so intern and new-grad roles reach
+the re-ranker) is the obvious next experiment.
 
 ## Design decisions
 

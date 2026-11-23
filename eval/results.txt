@@ -1,0 +1,8 @@
+4 resumes, k=5
+
+mode        precision@k   recall@k   median latency
+keyword            0.05       0.04           0.02 s
+vector             0.10       0.10           0.03 s
+rerank             0.10       0.10         510.99 s
+
+rerank: LLM answered for 4/4 resumes (the rest fell back to vector search)
