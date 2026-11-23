@@ -1,0 +1,11 @@
+Final year B.Com (Hons) student with a minor in data analytics.
+
+Experience
+- Analytics intern at a local retail chain (2 months): wrote SQL queries on sales data,
+  built weekly dashboards in Tableau, found that 20% of SKUs drove 70% of revenue.
+
+Projects
+- Analysed 3 years of loan repayment data in Python (pandas) to find which customer
+  segments default more. Built Excel models for monthly cash flow.
+
+Skills: SQL, Excel, Python, pandas, Tableau, Power BI, statistics

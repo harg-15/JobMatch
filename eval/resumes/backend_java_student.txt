@@ -1,0 +1,11 @@
+Second year B.Tech Computer Science student.
+
+Projects
+- Loan management backend: Java 17, Spring Boot, PostgreSQL, Redis. REST APIs for loan applications,
+  JWT auth, scheduled jobs for EMI reminders. Used Redis locks to avoid double processing of payments.
+- Library management system in Java with JDBC and MySQL.
+
+Skills: Java, Spring Boot, SQL, PostgreSQL, Redis, Docker, Git, JUnit, Mockito
+Coursework: Data Structures and Algorithms, DBMS, Operating Systems, Computer Networks
+LeetCode 1700, solved 600+ problems.
+Looking for a backend internship.

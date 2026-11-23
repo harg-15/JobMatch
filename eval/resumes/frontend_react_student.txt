@@ -1,0 +1,8 @@
+Second year student, frontend developer.
+
+Projects
+- Expense tracker web app: React, TypeScript, Tailwind CSS, charts with Recharts, deployed on Vercel.
+- College fest website with HTML, CSS and JavaScript, 5000+ visitors.
+- Chat app with React frontend and Node.js + Express + Socket.io backend, MongoDB for messages.
+
+Skills: JavaScript, TypeScript, React, HTML, CSS, Tailwind, Node.js, Express, MongoDB, Git, Figma basics

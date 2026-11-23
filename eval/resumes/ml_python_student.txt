@@ -1,0 +1,10 @@
+Third year B.Tech student, interested in machine learning and NLP.
+
+Projects
+- Question answering over college PDFs: chunked documents, generated embeddings with
+  sentence-transformers, stored them in a vector database and used an LLM to answer questions (RAG).
+- Fake news classifier: fine-tuned a BERT model in PyTorch with Hugging Face transformers, 91% accuracy.
+- Movie recommender using collaborative filtering in Python, numpy and pandas.
+
+Skills: Python, PyTorch, Hugging Face, scikit-learn, pandas, numpy, SQL, FastAPI, Git
+Coursework: Machine Learning, Linear Algebra, Probability and Statistics, DSA
