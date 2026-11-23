@@ -21,6 +21,7 @@ class Settings:
     llm_api_key: str = os.getenv("LLM_API_KEY", "")
     llm_base_url: str = os.getenv("LLM_BASE_URL", "")
     llm_model: str = os.getenv("LLM_MODEL", "")
+    llm_timeout: float = float(os.getenv("LLM_TIMEOUT", "120"))
 
     # how many jobs vector search hands to the LLM for re-ranking
     candidates_for_rerank: int = int(os.getenv("CANDIDATES_FOR_RERANK", "20"))

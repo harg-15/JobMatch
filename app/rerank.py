@@ -127,7 +127,7 @@ def openai_compatible_llm() -> LLMCall | None:
     client = OpenAI(
         api_key=settings.llm_api_key,
         base_url=settings.llm_base_url or None,
-        timeout=60,
+        timeout=settings.llm_timeout,
     )
 
     def call(system: str, user: str) -> str:

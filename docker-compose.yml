@@ -26,6 +26,9 @@ services:
       - "8000:8000"
     volumes:
       - models:/models
+    extra_hosts:
+      # lets the container reach Ollama running on your machine
+      - "host.docker.internal:host-gateway"
     depends_on:
       db:
         condition: service_healthy

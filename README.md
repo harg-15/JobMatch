@@ -41,6 +41,9 @@ docker compose up --build
 docker compose exec api python -m scripts.ingest csv data/sample_jobs.csv
 ```
 
+To use a local model instead of an API, see the Ollama block in `.env.example`. Small local
+models have short context windows, so re-ranking 10 candidates instead of 20 works better.
+
 The first ingest downloads the embedding model, after that it's cached in a volume.
 
 ### Without Docker
