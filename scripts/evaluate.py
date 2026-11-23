@@ -42,10 +42,13 @@ def evaluate(conn, embedder, llm, labels, resumes_dir: Path, modes, k: int = 5):
     results = {}
     for mode in modes:
         precisions, recalls, latencies = [], [], []
+        fallbacks = 0
         for resume_file, relevant in labels.items():
             text = (resumes_dir / resume_file).read_text(encoding="utf-8")
             start = time.perf_counter()
-            matches, _ = match_resume(conn, embedder, llm, text, mode=mode, top_k=k)
+            matches, reranked = match_resume(conn, embedder, llm, text, mode=mode, top_k=k)
+            if mode == "rerank" and not reranked:
+                fallbacks += 1  # LLM failed: these results are plain vector search
             latencies.append(time.perf_counter() - start)
 
             shown = [m["external_id"] for m in matches]
@@ -56,6 +59,7 @@ def evaluate(conn, embedder, llm, labels, resumes_dir: Path, modes, k: int = 5):
             "precision": statistics.mean(precisions),
             "recall": statistics.mean(recalls),
             "median_latency": statistics.median(latencies),
+            "fallbacks": fallbacks,
         }
     return results
 
@@ -83,6 +87,10 @@ def main() -> None:
     for mode, r in results.items():
         print(f"{mode:<10}{r['precision']:>13.2f}{r['recall']:>11.2f}"
               f"{r['median_latency']:>15.2f} s")
+    if "rerank" in results:
+        n = len(labels)
+        print(f"\nrerank: LLM answered for {n - results['rerank']['fallbacks']}/{n} resumes "
+              "(the rest fell back to vector search)")
 
 
 if __name__ == "__main__":

@@ -122,24 +122,28 @@ def openai_compatible_llm() -> LLMCall | None:
     if not (settings.llm_api_key and settings.llm_model):
         return None
 
-    from openai import OpenAI
+    from openai import OpenAI, OpenAIError
 
     client = OpenAI(
         api_key=settings.llm_api_key,
         base_url=settings.llm_base_url or None,
         timeout=settings.llm_timeout,
+        max_retries=0,
     )
 
     def call(system: str, user: str) -> str:
-        resp = client.chat.completions.create(
-            model=settings.llm_model,
-            messages=[
-                {"role": "system", "content": system},
-                {"role": "user", "content": user},
-            ],
-            response_format={"type": "json_object"},
-            temperature=0,
-        )
+        try:
+            resp = client.chat.completions.create(
+                model=settings.llm_model,
+                messages=[
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user},
+                ],
+                response_format={"type": "json_object"},
+                temperature=0,
+            )
+        except OpenAIError as exc:  # timeouts, connection errors, 4xx/5xx
+            raise RerankError(f"LLM call failed: {exc}") from exc
         return resp.choices[0].message.content or ""
 
     return call
